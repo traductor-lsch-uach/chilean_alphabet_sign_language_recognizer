@@ -9,3 +9,5 @@ pip install filterpy
 pip install gtts
 pip install opencv-python==4.2.0.32
 pip install pyttsx3
+
+git lfs migrate import --include="*.weights"
