@@ -1,0 +1,11 @@
+pip install numba
+pytorch
+pip install python-dateutil
+conda install pytorch torchvision cudatoolkit=10.2 -c pytorch
+pip install pyparsing
+pip install scikit-image
+pip install scikit-learn==0.22.2
+pip install filterpy
+pip install gtts
+pip install opencv-python==4.2.0.32
+pip install pyttsx3
