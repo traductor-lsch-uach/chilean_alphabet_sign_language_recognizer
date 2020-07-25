@@ -22,8 +22,7 @@ import os.path
 import numpy as np
 
 from skimage import io
-from sklearn.utils.linear_assignment_ import linear_assignment
-#from scipy.optimize import linear_sum_assignment
+from scipy.optimize import linear_sum_assignment
 import glob
 import time
 import argparse
@@ -148,7 +147,9 @@ def associate_detections_to_trackers(detections,trackers,iou_threshold = 0.3):
   for d,det in enumerate(detections):
     for t,trk in enumerate(trackers):
       iou_matrix[d,t] = iou(det,trk)
-  matched_indices = linear_assignment(-iou_matrix)
+  matched_indices = linear_sum_assignment(-iou_matrix)
+  matched_indices = np.asarray(matched_indices)
+  matched_indices = np.transpose(matched_indices)
 
   unmatched_detections = []
   for d,det in enumerate(detections):
