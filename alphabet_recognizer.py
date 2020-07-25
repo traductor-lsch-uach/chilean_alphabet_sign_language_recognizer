@@ -13,12 +13,32 @@ import warnings
 warnings.filterwarnings("ignore")
 
 try:
-    if(((sys.argv[1]) != '0')):
-        input_rsc = sys.argv[1]
+    if(sys.argv[1] != '0' and sys.argv[1] != '1'):
+        if os.path.exists(sys.argv[1]):
+            input_rsc = sys.argv[1]
+        else:
+            print('Wrong VIDEO_PATH, file does not exist')
+            raise SystemExit(f"Usage: python {sys.argv[0]} CAM_INDEX or python {sys.argv[0]} VIDEO_PATH")
     else:
         input_rsc = int(sys.argv[1])
+
+except Exception as e:
+    print('No input source')
+    raise SystemExit(f"Usage: python {sys.argv[0]} CAM_INDEX or python {sys.argv[0]} VIDEO_PATH")
+
+gpu = False
+try:
+    if sys.argv[2] == '-gpu':
+        gpu = True
+        print("Running with GPU")
+    else:
+        print("Wrong flag: " + sys.argv[2])
+        print("(RECOMMENDED) To use GPU, just add -gpu flag at the end")
+        print("Running with CPU")
 except:
-    exit()
+    print("Running with CPU")
+    print("(RECOMMENDED) To use GPU, just add -gpu flag at the end")
+    pass
 
 custom_lenet_class_path = "config/alphabet.names"
 custom_lenet_weights_path = "weights/custom_lenet_100_02.weights.weights"
@@ -36,8 +56,6 @@ custom_lenet_thresh = 0.75
 
 yolo_classes = load_classes(yolo_class_path)
 custom_lenet_classes = load_classes(custom_lenet_class_path)
-
-gpu = True
 
 # load model and put into eval mode
 darknet_model = Darknet(yolo_config_path, img_size=img_size)

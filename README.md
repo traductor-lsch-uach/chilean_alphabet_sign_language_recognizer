@@ -22,10 +22,10 @@ Chilean Alphabet Sign Language Recognizer for letters perform by static gestures
 
 # 1. If you want to use a web camera
 ```
-$ python alphabet_recognizer CAM_INDEX
+$ python alphabet_recognizer.py CAM_INDEX
 ```
 
-where CAM_INDEX = 0 or 1, it depends where the USB camera is connected
+where *CAM_INDEX = 0 or 1, it depends where the USB camera is connected
 To check this, run:
 ```
 $ ls -ltrh /dev/video*
@@ -33,8 +33,26 @@ $ ls -ltrh /dev/video*
 
 # 2. If you want to use a video
 ```
-$ python alphabet_recognizer VIDEO_PATH
+$ python alphabet_recognizer.py VIDEO_PATH
 ```
+
+You can try the repo example video:
+```
+$ python alphabet_recognizer.py testing_videos/ABC.mp4
+```
+
+# 3. GPU Usage (Recommended)
+If you have GPU, add *-gpu flag at the end:
+
+```
+$ python alphabet_recognizer.py CAM_INDEX -gpu
+```
+or
+
+```
+$ python alphabet_recognizer.py VIDEO_PATH -gpu
+```
+
 
 ## How to use
 * Make a Alphabet Static Gesture of LSCh ([Click here to see the examples](https://i.imgur.com/dBhepde.png)), and wait for the letter to be added to the displayed spelled word on the WORD screen.
