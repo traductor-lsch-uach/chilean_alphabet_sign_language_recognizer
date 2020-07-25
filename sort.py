@@ -20,8 +20,7 @@ from __future__ import print_function
 from numba import jit
 import os.path
 import numpy as np
-##import matplotlib.pyplot as plt
-##import matplotlib.patches as patches
+
 from skimage import io
 from sklearn.utils.linear_assignment_ import linear_assignment
 #from scipy.optimize import linear_sum_assignment

@@ -67,12 +67,14 @@ mot_tracker = Sort()
 
 cv2.namedWindow('Stream',cv2.WINDOW_NORMAL)
 cv2.resizeWindow('Stream', (800,600))
+cv2.moveWindow('Stream', 0, 0)
 
 #cv2.namedWindow('HAND',cv2.WINDOW_NORMAL)
 #cv2.resizeWindow('HAND', (600,600))
 
 cv2.namedWindow('WORD',cv2.WINDOW_NORMAL)
 cv2.resizeWindow('WORD', (2000,300))
+cv2.moveWindow('WORD', 0, 1000)
 
 text_position = (50,180)
 black = np.zeros((300,2000,3),np.uint8)
