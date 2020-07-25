@@ -102,7 +102,7 @@ while ret:
     except:
         if len(word) >= 3:
             save_full_word_with_gtts(word)
-            #say_full_word_with_pyttsx3(word)
+            say_full_word_with_pyttsx3(word)
             print('Finished video')
             exit(0)
 
@@ -299,7 +299,7 @@ while ret:
             try:
                 if len(word) >= 3:
                     save_full_word_with_gtts(word)
-                    #say_full_word_with_pyttsx3(word)
+                    say_full_word_with_pyttsx3(word)
                     flag = 2
                     black = updateText(word)
                     word = ''
@@ -363,7 +363,7 @@ while ret:
         
         if len(word) >= 3 and no_hand_detection_counter > no_detection_time :
             save_full_word_with_gtts(word)
-            #say_full_word_with_pyttsx3(word)
+            say_full_word_with_pyttsx3(word)
             flag = 2
             black = updateText(word)
             word = ''
