@@ -30,7 +30,6 @@ gpu = False
 try:
     if sys.argv[2] == '-gpu':
         gpu = True
-        print("Running with GPU")
     else:
         print("Wrong flag: " + sys.argv[2])
         print("(RECOMMENDED) To use GPU, just add -gpu flag at the end")
@@ -62,11 +61,18 @@ darknet_model = Darknet(yolo_config_path, img_size=img_size)
 darknet_model.load_weights(yolo_weights_path)
 
 custom_lenet_model = CustomModel(n_output=len(custom_lenet_classes))
-custom_lenet_model.load_weights(custom_lenet_weights_path)
+custom_lenet_model.load_weights(custom_lenet_weights_path, gpu)
 
 if gpu:
-    darknet_model.cuda()
-    custom_lenet_model = custom_lenet_model.cuda()
+    try:
+        darknet_model.cuda()
+    except:
+        darknet_model.cpu()
+    try:
+        custom_lenet_model = custom_lenet_model.cuda()
+        print("Running with GPU")
+    except Exception as e:
+        custom_lenet_model.cpu()
 
 darknet_model.eval()
 custom_lenet_model.eval()
@@ -115,6 +121,7 @@ while ret:
     ret, frame = cap.read()
     frames += 1
     flag = 0
+    
     try:
         frame_shape = frame.shape
     except:

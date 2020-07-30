@@ -300,11 +300,6 @@ def classify_letter(img, model, classes, gpu):
 
 def yolo_detector(img, img_size, darknet_model, conf_thresh, nms_thresh, gpu):
     # scale and pad image
-    if gpu:
-        Tensor = torch.cuda.FloatTensor
-    else:
-        Tensor = torch.FloatTensor
-
     ratio = min(img_size/img.size[0], img_size/img.size[1])
     imw = round(img.size[0] * ratio)
     imh = round(img.size[1] * ratio)
@@ -316,7 +311,19 @@ def yolo_detector(img, img_size, darknet_model, conf_thresh, nms_thresh, gpu):
     # convert image to Tensor
     image_tensor = img_transforms(img).float()
     image_tensor = image_tensor.unsqueeze_(0)
-    input_img = Variable(image_tensor.type(Tensor))
+
+
+    if gpu:
+        try:
+            Tensor = torch.cuda.FloatTensor
+            input_img = Variable(image_tensor.type(Tensor))
+        except Exception as e:
+            Tensor = torch.FloatTensor
+            input_img = Variable(image_tensor.type(Tensor))
+    else:
+        Tensor = torch.FloatTensor
+        input_img = Variable(image_tensor.type(Tensor))
+    
     # run inference on the darknet_model and get detections
     with torch.no_grad():
         detections = darknet_model(input_img)

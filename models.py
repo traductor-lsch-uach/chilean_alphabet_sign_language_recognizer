@@ -381,8 +381,11 @@ class LeNet5(torch.nn.Module):
     def save_weights(self, path):
         torch.save(self.state_dict(), path)
     
-    def load_weights(self, path):
-        self.load_state_dict(torch.load(path))
+    def load_weights(self, path, gpu):
+        if gpu:
+            self.load_state_dict(torch.load(path))
+        else:
+            self.load_state_dict(torch.load(path, map_location='cpu'))
 
 
 class CustomModel(torch.nn.Module):
@@ -420,5 +423,13 @@ class CustomModel(torch.nn.Module):
     def save_weights(self, path):
         torch.save(self.state_dict(), path)
     
-    def load_weights(self, path):
-        self.load_state_dict(torch.load(path))
+    def load_weights(self, path, gpu):
+        if gpu:
+            try:
+                self.load_state_dict(torch.load(path))
+            except Exception as e:
+                self.load_state_dict(torch.load(path, map_location='cpu'))
+                print("GPU not supported")
+                print("Running with CPU")
+        else:
+            self.load_state_dict(torch.load(path, map_location='cpu'))
