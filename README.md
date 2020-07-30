@@ -18,40 +18,66 @@ Chilean Alphabet Sign Language Recognizer for letters perform by static gestures
   * numba==0.50.1
   * filterpy==1.4.5
 
+### (Recommended) Installation using conda
+
+* Install Miniconda3 for Python 3.8: https://docs.conda.io/en/latest/miniconda.html
+
+* Add conda to path (depends on where you installed it)
+```
+source ~/miniconda3/etc/profile.d/conda.sh
+```
+
+* Create environment. Do I have a nice and shiny NVIDIA GPU?
+  * YES
+   ```
+   conda env create -f environment_gpu.yml
+   ```
+
+  * NO
+   ```
+   conda env create -f environment_cpu.yml
+   ```
+
 ## How to run
+  
+  * Activate environment
+  ```
+  conda activate lsch
+  ```
 
-# 1. If you want to use a web camera
-```
-$ python alphabet_recognizer.py CAM_INDEX
-```
+  ### 1. If you want to use a web camera
+  ```
+  $ python alphabet_recognizer.py CAM_INDEX
+  ```
 
-where *CAM_INDEX = 0 or 1, it depends where the USB camera is connected
-To check this, run:
-```
-$ ls -ltrh /dev/video*
-```
+  where *CAM_INDEX = 0 or 1, it depends where the USB camera is connected
+  To check this, run:
+  ```
+  $ ls -ltrh /dev/video*
+  ```
 
-# 2. If you want to use a video
-```
-$ python alphabet_recognizer.py VIDEO_PATH
-```
+  ### 2. If you want to use a video
+  ```
+  $ python alphabet_recognizer.py VIDEO_PATH
+  ```
 
-You can try the repo example video:
-```
-$ python alphabet_recognizer.py testing_videos/ABC.mp4
-```
+  You can try the repo example video:
+  ```
+  $ python alphabet_recognizer.py testing_videos/ABC.mp4
+  ```
+  
+  ### 3. (Recommended) GPU Usage
 
-# 3. GPU Usage (Recommended)
-If you have GPU, add *-gpu flag at the end:
+  If you have GPU, add *-gpu flag at the end:
 
-```
-$ python alphabet_recognizer.py CAM_INDEX -gpu
-```
-or
+  ```
+  $ python alphabet_recognizer.py CAM_INDEX -gpu
+  ```
+  or
 
-```
-$ python alphabet_recognizer.py VIDEO_PATH -gpu
-```
+  ```
+  $ python alphabet_recognizer.py VIDEO_PATH -gpu
+  ```
 
 
 ## How to use
@@ -63,7 +89,7 @@ $ python alphabet_recognizer.py VIDEO_PATH -gpu
   - Backspace: Delete last letter.
   - Space: Put a space at the end.
 
-### Demo
+## Demo
 ![](src/demo.gif)
 
 ## Authors
