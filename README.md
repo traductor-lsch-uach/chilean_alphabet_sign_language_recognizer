@@ -81,13 +81,14 @@ source ~/miniconda3/etc/profile.d/conda.sh
 
 
 ## How to use
-* Make a Alphabet Static Gesture of LSCh ([Click here to see the examples](https://i.imgur.com/dBhepde.png)), and wait for the letter to be added to the displayed spelled word on the WORD screen.
-* If you want to add a letter that is represented by a dynamic gesture, just enter it using the keyboard (G, J, Ñ, S, X or Z).
+* Make a Alphabet Static Gesture of LSCh ([Click here to see the examples](https://i.imgur.com/dBhepde.png)), and wait for the letter to be added to the displayed spelled word on the **Word** window.
+* If you want to add a letter that is represented by a dynamic gesture, just enter it using the keyboard (*G, J, Ñ, S, X* or *Z*).
 * To save and play the audio of the spelled word, press Enter.
 * Other keyboard actions:
-  - Supr: Delete all.
-  - Backspace: Delete last letter.
-  - Space: Put a space at the end.
+  - *B*: Delete all.
+  - *Backspace*: Delete last letter.
+  - *Space*: Put a space at the end.
+  - *Q*: Close the application.
 
 ## Demo
 ![](src/demo.gif)

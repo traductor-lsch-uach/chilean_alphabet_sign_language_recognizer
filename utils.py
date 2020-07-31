@@ -327,7 +327,7 @@ def yolo_detector(img, img_size, darknet_model, conf_thresh, nms_thresh, gpu):
     # run inference on the darknet_model and get detections
     with torch.no_grad():
         detections = darknet_model(input_img)
-        detections = non_max_suppression(detections, 80, conf_thresh, nms_thresh)
+        detections = non_max_suppression(detections, 2, conf_thresh, nms_thresh)
     return detections[0]
 
 
@@ -353,11 +353,11 @@ def updateText(word):
 
 def save_full_word_with_gtts(word):
     tts = gTTS(text=word, lang='es')
-    audio_path = 'full_word.mp3'
+    audio_path = 'word.mp3'
     tts.save(audio_path)
     print('Audio saved on ' + audio_path)
 
 def say_full_word_with_pyttsx3(word):
-    print('Say full word')
+    print('SAYING WORD...')
     engine.say(word)
     engine.runAndWait()

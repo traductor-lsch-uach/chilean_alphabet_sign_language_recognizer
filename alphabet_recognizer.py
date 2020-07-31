@@ -72,6 +72,7 @@ if gpu:
         custom_lenet_model = custom_lenet_model.cuda()
         print("Running with GPU")
     except Exception as e:
+        gpu = False
         custom_lenet_model.cpu()
 
 darknet_model.eval()
@@ -90,15 +91,12 @@ else:
 mot_tracker = Sort() 
 
 cv2.namedWindow('Stream',cv2.WINDOW_NORMAL)
-cv2.resizeWindow('Stream', (800,600))
+cv2.resizeWindow('Stream', (600,400))
 cv2.moveWindow('Stream', 0, 0)
 
-#cv2.namedWindow('HAND',cv2.WINDOW_NORMAL)
-#cv2.resizeWindow('HAND', (600,600))
-
-cv2.namedWindow('WORD',cv2.WINDOW_NORMAL)
-cv2.resizeWindow('WORD', (2000,300))
-cv2.moveWindow('WORD', 0, 1000)
+cv2.namedWindow('Word',cv2.WINDOW_NORMAL)
+cv2.resizeWindow('Word', (2000,300))
+cv2.moveWindow('Word', 0, 1000)
 
 text_position = (50,180)
 black = np.zeros((300,2000,3),np.uint8)
@@ -108,14 +106,21 @@ word = ''
 last_center = (0,0)
 
 last_detected_letter = ''
-letter_detection_wait = 20
-no_detection_time = 40
 no_hand_detection_counter = 0
 letter_detection_array = []
-clear_array_count = 20
-
-letter_array_wait = 12
-min_array_quantity = 6
+if gpu:
+    clear_array_count = 20
+    letter_detection_wait = 20
+    no_detection_time = 40
+    letter_array_wait = 12
+    min_array_quantity = 6
+    
+if not gpu:
+    clear_array_count = 5
+    letter_detection_wait = 3
+    no_detection_time = 6
+    letter_array_wait = 6
+    min_array_quantity = 2
 
 while ret:
     ret, frame = cap.read()
@@ -150,7 +155,6 @@ while ret:
                 tracked_hand = a[0]
                 x1, y1, x2, y2, obj_id, cls_pred, precision = tracked_hand
                 if cls_pred == 1.0:
-                    cls = 'hand'
                     precision = str(round(precision * 100, 2)) + "%"
                     
                     box_h = int(((y2 - y1) / unpad_h) * img.shape[0])
@@ -163,8 +167,6 @@ while ret:
                     height_thresh = box_h / frame_shape[1] * 100
 
                     cv2.rectangle(frame, (x1, y1), (x1+box_w, y1+box_h), color, 2)
-                    #cv2.rectangle(frame, (x1, y1-35), (x1+len(cls)*19+80, y1), color, -1)
-                    #cv2.putText(frame, cls + "-" + precision, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255,255,255), 1, cv2.LINE_AA)
 
                     current_center = (x1 + box_w - int(box_w/2), y1 + box_h - int(box_h/2))
                     a = (current_center[0]-last_center[0])**2
@@ -191,13 +193,15 @@ while ret:
                             if (last_detected_letter == ''): 
                                 last_detected_letter = detect_letters[0] #first letter when no detected last letter
                             
-                            print(detect_letters[0], str(accuracies[0]) + '%')
+                            print('Letter detected: ', detect_letters[0], ' - Accuracy: ', str(accuracies[0]) + '%')
 
                             letter_detection_array.append(detect_letters[0])
-
+                            
+                            #WHEN WORD IS EMPTY
                             if(word == ''):
                                 black = updateText(word)
 
+                                #ADD MOST COMMON IN ARRAY
                                 if len(letter_detection_array) > letter_array_wait:
                                     ctr = Counter(np.array(letter_detection_array).ravel())
                                     letter_detection_array = []
@@ -208,62 +212,64 @@ while ret:
                                         last_detected_letter = letters_to_add[0][0]
                                         detected_letter_counter = 0
                                         letter_detection_array = []
-                                        print(word)
+                                        print('WORD: ', word)
                                         black = updateText(word)
-                                        print('START FIRST ADD BY FIRST ARRAY')
 
+                                    #ADD SECOND MOST COMMON IN ARRAY
                                     elif letters_to_add[1] != [] and letters_to_add[1][1] > min_array_quantity:
                                         word = word + letters_to_add[1][0]
                                         flag = 1
                                         last_detected_letter = letters_to_add[1][0]
                                         detected_letter_counter = 0
                                         letter_detection_array = []
-                                        print(word)
+                                        print('WORD: ', word)
                                         black = updateText(word)
-                                        print('START FIRST ADD BY SECOND ARRAY')
 
+                                #ADD BY LETTER COUNTER
                                 if detected_letter_counter > letter_detection_wait:
                                     word = word + detect_letters[0]
                                     flag = 1
                                     detected_letter_counter = 0
                                     letter_detection_array = []
-                                    print(word)
+                                    print('WORD: ', word)
                                     black = updateText(word)
-                                    print('ADD FIRST BY COUNTER')
 
+                            #WHEN WORD IS NOT EMPTY
                             if (word != ''):
                                 if len(letter_detection_array) > letter_array_wait: #and last_detected_letter !=detect_letters[0]:
                                     ctr = Counter(np.array(letter_detection_array).ravel())
                                     letter_detection_array = []
                                     letters_to_add = ctr.most_common(2)
+                                    #ADD MOST COMMON IN ARRAY
                                     if word[-1] != letters_to_add[0][0] and letters_to_add[0] != [] and letters_to_add[0][1] > min_array_quantity:
                                         word = word + letters_to_add[0][0]
                                         flag = 1
                                         last_detected_letter = letters_to_add[0][0]
                                         detected_letter_counter = 0
                                         letter_detection_array = []
-                                        print(word)
+                                        print('WORD: ', word)
                                         black = updateText(word)
-                                        print('ADD BY ARRAY FIRST')
+                                    
+                                    #ADD SECOND MOST COMMON IN ARRAY
                                     elif word[-1] != letters_to_add[1][0] and letters_to_add[1] != [] and letters_to_add[1][1] > min_array_quantity:
                                         word = word + letters_to_add[1][0]
                                         flag = 1
                                         last_detected_letter = letters_to_add[1][0]
                                         detected_letter_counter = 0
                                         letter_detection_array = []
-                                        print(word)
+                                        print('WORD: ', word)
                                         black = updateText(word)
-                                        print('ADD BY ARRAY SECOND')
 
+                                #ADD BY LETTER COUNTER
                                 if detected_letter_counter > letter_detection_wait and word[-1] != detect_letters[0]:
                                     word = word + detect_letters[0]
                                     flag = 1
                                     detected_letter_counter = 0
                                     letter_detection_array = []
-                                    print(word)
+                                    print('WORD: ', word)
                                     black = updateText(word)
-                                    print('ADD BY COUNTER')
 
+                            #NO HAND DETECTION, CLEAN ARRAY
                             if (no_hand_detection_counter > clear_array_count):
                                 if(len(letter_detection_array) > 15):
                                     letter_to_add = stats.mode(letter_detection_array)
@@ -271,10 +277,9 @@ while ret:
                                     flag = 1
                                     last_detected_letter = letter_to_add
                                     detected_letter_counter = 0
-                                    print(word)
+                                    print('WORD: ', word)
                                     black = updateText(word)
                                 letter_detection_array = []
-                                print('ARRAY CLEANED')
 
                             last_detected_letter = detect_letters[0]
                         else:
@@ -285,11 +290,13 @@ while ret:
                 pass
         else:
             no_hand_detection_counter += 1
+            
+            #NO HAND DETECTION, CLEAN ARRAY
             if (no_hand_detection_counter > clear_array_count):
                 letter_detection_array = []
 
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        cv2.imshow('WORD', black)
+        cv2.imshow('Word', black)
         cv2.imshow('Stream', frame)
         ch = 0xFF & cv2.waitKey(1)
         if ch == ord('q'):
@@ -305,12 +312,13 @@ while ret:
             except:
                 pass
 
-        #Delete word (Supr)
+        #Delete word ('B' key)
         if ch == ord('b'):
-            black = updateText(word)
             word = ''
+            black = updateText(word)
             detected_letter_counter = 0
             letter_detection_array = []
+            flag = 0
 
         #Put a space after word (Space)
         if ch == ord(' '):
@@ -326,8 +334,8 @@ while ret:
                     save_full_word_with_gtts(word)
                     say_full_word_with_pyttsx3(word)
                     flag = 2
-                    black = updateText(word)
                     word = ''
+                    black = updateText(word)
             except:
                 pass
 
@@ -337,7 +345,7 @@ while ret:
             last_detected_letter = 'G'
             detected_letter_counter = 0
             letter_detection_array = []
-            print(word)
+            print('WORD: ', word)
             flag = 1
             black = updateText(word)
 
@@ -346,7 +354,7 @@ while ret:
             last_detected_letter = 'J'
             detected_letter_counter = 0
             letter_detection_array = []
-            print(word)
+            print('WORD: ', word)
             flag = 1
             black = updateText(word)
 
@@ -355,7 +363,7 @@ while ret:
             last_detected_letter = 'Ñ'
             detected_letter_counter = 0
             letter_detection_array = []
-            print(word)
+            print('WORD: ', word)
             flag = 1
             black = updateText(word)
 
@@ -364,7 +372,7 @@ while ret:
             last_detected_letter = 'S'
             detected_letter_counter = 0
             letter_detection_array = []
-            print(word)
+            print('WORD: ', word)
             flag = 1
             black = updateText(word)
 
@@ -373,7 +381,7 @@ while ret:
             last_detected_letter = 'X'
             detected_letter_counter = 0
             letter_detection_array = []
-            print(word)
+            print('WORD: ', word)
             flag = 1
             black = updateText(word)
 
@@ -382,7 +390,7 @@ while ret:
             last_detected_letter = 'Z'
             detected_letter_counter = 0
             letter_detection_array = []
-            print(word)
+            print('WORD: ', word)
             flag = 1
             black = updateText(word)
         
@@ -390,7 +398,7 @@ while ret:
             save_full_word_with_gtts(word)
             say_full_word_with_pyttsx3(word)
             flag = 2
-            black = updateText(word)
             word = ''
+            black = updateText(word)
 
 cv2.destroyAllWindows()
