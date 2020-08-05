@@ -38,6 +38,11 @@ source ~/miniconda3/etc/profile.d/conda.sh
    conda env create -f environment_cpu.yml
    ```
 
+### Download weights
+
+1. Download ```yolov3_face_hand.weights``` file: https://tinyurl.com/yxhnkjdk
+2. Put ```yolov3_face_hand.weights``` file in ```weights/``` folder
+
 ## How to run
   
   * Activate environment
@@ -50,7 +55,8 @@ source ~/miniconda3/etc/profile.d/conda.sh
   $ python alphabet_recognizer.py CAM_INDEX
   ```
 
-  where *CAM_INDEX = 0 or 1, it depends where the USB camera is connected
+  where ```CAM_INDEX``` = 0 or 1, it depends where the USB camera is connected.
+  
   To check this, run:
   ```
   $ ls -ltrh /dev/video*
@@ -68,7 +74,7 @@ source ~/miniconda3/etc/profile.d/conda.sh
   
   ### 3. (Recommended) GPU Usage
 
-  If you have GPU, add *-gpu flag at the end:
+  If you have GPU, add ```-gpu``` flag at the end:
 
   ```
   $ python alphabet_recognizer.py CAM_INDEX -gpu
@@ -85,10 +91,10 @@ source ~/miniconda3/etc/profile.d/conda.sh
 * If you want to add a letter that is represented by a dynamic gesture, just enter it using the keyboard (*G, J, Ñ, S, X* or *Z*).
 * To save and play the audio of the spelled word, press Enter.
 * Other keyboard actions:
-  - *B*: Delete all.
-  - *Backspace*: Delete last letter.
-  - *Space*: Put a space at the end.
-  - *Q*: Close the application.
+  - *B*         : Delete all.
+  - *Backspace* : Delete last letter.
+  - *Space*     : Put a space at the end.
+  - *Q*         : Close the application.
 
 ## Demo
 ![](src/demo.gif)
