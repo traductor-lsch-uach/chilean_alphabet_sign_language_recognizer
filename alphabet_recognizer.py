@@ -40,7 +40,7 @@ except:
     pass
 
 custom_lenet_class_path = "config/alphabet.names"
-custom_lenet_weights_path = "weights/custom_lenet_100_02.weights.weights"
+custom_lenet_weights_path = "weights/custom_lenet_100_02.weights"
 
 # load weights and set defaults
 yolo_config_path='config/yolov3_face_hand.cfg'
