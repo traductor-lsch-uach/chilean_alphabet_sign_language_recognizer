@@ -85,6 +85,11 @@ source ~/miniconda3/etc/profile.d/conda.sh
   $ python alphabet_recognizer.py VIDEO_PATH -gpu
   ```
 
+## Note
+* If you are on a linux system and if the voice output is not working , then install ``` speak ``` ``` ffmpeg ``` and ``` libspeak1 ``` as shown below:
+```
+$ sudo apt install espeak ffmpeg libespeak1
+```
 
 ## How to use
 * Make a Alphabet Static Gesture of LSCh ([Click here to see the examples](https://i.imgur.com/dBhepde.png)), and wait for the letter to be added to the displayed spelled word on the **Word** window.
