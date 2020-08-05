@@ -1,5 +1,5 @@
 # Chilean Alphabet Sign Language Recognizer
-Chilean Alphabet Sign Language Recognizer for letters perform by static gestures using ConvNets on Pytorch.
+Chilean Alphabet Sign Language Recognizer for letters perform by static gestures using OpenCV and ConvNets (YoloV3 and Custom Lenet) on Pytorch.
 
 ![](src/system.gif)
 
