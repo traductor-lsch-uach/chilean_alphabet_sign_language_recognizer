@@ -42,7 +42,7 @@ source ~/miniconda3/etc/profile.d/conda.sh
 
 ### Download weights
 
-1. Download ```yolov3_face_hand.weights``` file: https://tinyurl.com/yxhnkjdk
+1. Download ```yolov3_face_hand.weights``` file: https://tinyurl.com/3we23btn
 2. Put ```yolov3_face_hand.weights``` file in ```weights/``` folder
 
 ## How to run
